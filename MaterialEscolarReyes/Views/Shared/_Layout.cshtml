@@ -16,6 +16,11 @@
 
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0d6efd">
+    <link rel="apple-touch-icon" href="/images/icon-192.png">
     <style>
 
             body {
@@ -536,6 +541,13 @@
     }
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js');
+        }
+    </script>
+</body>
 
 </body>
 
