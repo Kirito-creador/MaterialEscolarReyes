@@ -1,0 +1,199 @@
+﻿@model IEnumerable<MaterialEscolarReyes.Models.Categoria>
+
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="text-light fw-bold mb-0">
+            <i class="bi bi-tags-fill"></i>
+            Categorías
+        </h2>
+
+        <small class="text-secondary">
+            Administración de categorías
+        </small>
+
+    </div>
+
+    <a asp-action="Create" class="btn btn-success">
+
+        <i class="bi bi-plus-circle"></i>
+
+        Nueva Categoría
+
+    </a>
+
+</div>
+
+<div class="row mb-4">
+
+    <div class="col-md-6">
+
+        <input type="text"
+               id="buscar"
+               class="form-control"
+               placeholder="🔍 Buscar categoría..." />
+
+    </div>
+
+</div>
+
+<div class="row" id="contenedorCategorias">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-4 categoria-item">
+
+            <div class="card categoria-card h-100">
+
+                @if (string.IsNullOrEmpty(item.Imagen))
+                {
+                    <img src="/images/no-image.png"
+                         class="card-img-top">
+                }
+                else
+                {
+                    <img src="/uploads/categorias/@item.Imagen"
+                         class="card-img-top">
+                }
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+
+                        @item.Nombre
+
+                    </h5>
+
+                    <p>
+
+                        @if (item.Estado)
+                        {
+                            <span class="badge bg-success">
+
+                                Activa
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">
+
+                                Inactiva
+
+                            </span>
+                        }
+
+                    </p>
+
+                    <small class="text-secondary">
+
+                        <i class="bi bi-calendar3"></i>
+
+                        @item.FechaRegistro.ToString("dd/MM/yyyy")
+
+                    </small>
+
+                </div>
+
+                <div class="card-footer bg-transparent border-0">
+
+                    <div class="d-grid gap-2">
+
+                        <a asp-action="Edit"
+                           asp-route-id="@item.Id"
+                           class="btn btn-warning">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                            Editar
+
+                        </a>
+
+                        <button class="btn btn-danger"
+                                onclick="confirmarEliminar(@item.Id,'@item.Nombre')">
+
+                            <i class="bi bi-trash"></i>
+
+                            Eliminar
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        const txtBuscar=document.getElementById("buscar");
+
+        txtBuscar.addEventListener("keyup",function(){
+
+            let texto=this.value.toLowerCase();
+
+            let tarjetas=document.querySelectorAll(".categoria-item");
+
+            tarjetas.forEach(function(card){
+
+                let nombre=card.innerText.toLowerCase();
+
+                if(nombre.includes(texto))
+                {
+                    card.style.display="block";
+                }
+                else
+                {
+                    card.style.display="none";
+                }
+
+            });
+
+        });
+                function confirmarEliminar(id,nombre){
+
+            Swal.fire({
+
+                title:'¿Eliminar categoría?',
+
+                text:'Se eliminará "'+nombre+'"',
+
+                icon:'warning',
+
+                showCancelButton:true,
+
+                confirmButtonColor:'#dc3545',
+
+                cancelButtonColor:'#6c757d',
+
+                confirmButtonText:'Eliminar',
+
+                cancelButtonText:'Cancelar'
+
+            }).then((result)=>{
+
+                if(result.isConfirmed){
+
+                    window.location='/Categorias/Delete/'+id;
+
+                }
+
+            });
+
+        }
+
+    </script>
+
+}

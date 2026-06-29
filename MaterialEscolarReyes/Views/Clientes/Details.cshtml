@@ -1,0 +1,101 @@
+﻿@model MaterialEscolarReyes.Models.Cliente
+
+@{
+    ViewData["Title"] = "Detalle del Cliente";
+}
+
+<div class="container">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3>
+
+                <i class="bi bi-person-circle"></i>
+
+                Información del Cliente
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">Nombre</label>
+
+                    <p>@Model.Nombre @Model.Apellido</p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">Correo</label>
+
+                    <p>@Model.Correo</p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">Teléfono</label>
+
+                    <p>@Model.Telefono</p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">Dirección</label>
+
+                    <p>@Model.Direccion</p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">Estado</label>
+
+                    <p>
+
+                        @if (Model.Estado)
+                        {
+                            <span class="badge bg-success">Activo</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactivo</span>
+                        }
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">Fecha de Registro</label>
+
+                    <p>@Model.FechaRegistro.ToString("dd/MM/yyyy")</p>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Volver
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

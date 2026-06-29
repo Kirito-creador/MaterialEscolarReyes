@@ -1,0 +1,317 @@
+﻿@model IEnumerable<MaterialEscolarReyes.Models.Carrito>
+
+@{
+    ViewData["Title"] = "Mi Carrito";
+    Layout = "~/Views/Shared/_LayoutTienda.cshtml";
+
+    decimal total = 0;
+}
+
+<div class="container py-5">
+
+    <h2 class="fw-bold mb-4">
+
+        <i class="bi bi-cart3"></i>
+
+        Mi Carrito
+
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+
+            <h4>Tu carrito está vacío.</h4>
+
+            <a asp-controller="Tienda"
+               asp-action="Index"
+               class="btn btn-primary mt-3">
+
+                Seguir Comprando
+
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Imagen</th>
+
+                    <th>Producto</th>
+
+                    <th>Precio</th>
+
+                    <th>Cantidad</th>
+
+                    <th>Subtotal</th>
+
+                    <th></th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    decimal subtotal =
+                        item.Producto!.PrecioVenta * item.Cantidad;
+
+                    total += subtotal;
+
+                    <tr>
+
+                        <td width="120">
+
+                            @if (string.IsNullOrEmpty(item.Producto.ImagenPrincipal))
+                            {
+                                <img src="/images/no-image.png"
+                                     class="img-fluid rounded"
+                                     style="height:90px;">
+                            }
+                            else
+                            {
+                                <img src="/uploads/productos/@item.Producto.ImagenPrincipal"
+                                     class="img-fluid rounded"
+                                     style="height:90px;">
+                            }
+
+                        </td>
+
+                        <td>
+
+                            <strong>
+
+                                @item.Producto.Nombre
+
+                            </strong>
+
+                        </td>
+
+                        <td>
+
+                            Bs @item.Producto.PrecioVenta
+
+                        </td>
+                        <td class="text-center">
+
+                            <div class="d-flex justify-content-center align-items-center">
+
+                                <button class="btn btn-outline-secondary btn-sm disminuir"
+                                        data-id="@item.Id">
+
+                                    <i class="bi bi-dash"></i>
+
+                                </button>
+
+                                <span id="cantidad-@item.Id"
+                                      class="mx-3 fw-bold">
+
+                                    @item.Cantidad
+
+                                </span>
+
+                                <button class="btn btn-outline-success btn-sm aumentar"
+                                        data-id="@item.Id">
+
+                                    <i class="bi bi-plus"></i>
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <strong id="subtotal-@item.Id">
+
+                                Bs @subtotal
+
+                            </strong>
+
+                        </td>
+
+                        <td>
+
+                            <button class="btn btn-danger"
+                                    onclick="eliminar(@item.Id)">
+
+                                <i class="bi bi-trash"></i>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+        <div class="text-end">
+
+            <h3>
+
+                Total:
+                <span id="totalGeneral" class="text-success">
+
+                    Bs @total
+
+                </span>
+
+            </h3>
+
+            <a asp-controller="Tienda"
+               asp-action="Index"
+               class="btn btn-secondary">
+
+                Seguir Comprando
+
+            </a>
+
+            <a asp-action="Checkout"
+               class="btn btn-success">
+
+                Finalizar Compra
+
+            </a>
+
+        </div>
+
+    }
+    @section Scripts{
+
+        <script>
+
+                async function eliminar(id){
+
+                    const respuesta = await Swal.fire({
+
+                        title:"¿Eliminar producto?",
+
+                        icon:"question",
+
+                        showCancelButton:true,
+
+                        confirmButtonText:"Sí",
+
+                        cancelButtonText:"No"
+
+                    });
+
+                    if(!respuesta.isConfirmed)
+                        return;
+
+                    let peticion = await fetch("/Carrito/Eliminar",{
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":"application/x-www-form-urlencoded"
+                        },
+
+                        body:`id=${id}`
+
+                    });
+
+                    let datos = await peticion.json();
+
+                    if(datos.ok){
+
+                        location.reload();
+
+                    }
+
+                }
+
+
+                //=========================
+                // BOTÓN +
+                //=========================
+
+                document.querySelectorAll(".aumentar").forEach(boton=>{
+
+                    boton.addEventListener("click",()=>{
+
+                        actualizarCantidad(boton.dataset.id,1);
+
+                    });
+
+                });
+
+
+                //=========================
+                // BOTÓN -
+                //=========================
+
+                document.querySelectorAll(".disminuir").forEach(boton=>{
+
+                    boton.addEventListener("click",()=>{
+
+                        actualizarCantidad(boton.dataset.id,-1);
+
+                    });
+
+                });
+
+
+                //=========================
+                // ACTUALIZAR CANTIDAD
+                //=========================
+
+                async function actualizarCantidad(id,cambio){
+
+                    let cantidad=document.getElementById("cantidad-"+id);
+
+                    let nuevaCantidad=parseInt(cantidad.innerText)+cambio;
+
+                    if(nuevaCantidad<=0){
+
+                        eliminar(id);
+
+                        return;
+
+                    }
+
+                    let peticion=await fetch("/Carrito/ActualizarCantidad",{
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":"application/x-www-form-urlencoded"
+                        },
+
+                        body:`id=${id}&cantidad=${nuevaCantidad}`
+
+                    });
+
+                    let datos=await peticion.json();
+
+                    if(datos.ok){
+
+                        cantidad.innerText=nuevaCantidad;
+
+                        document.getElementById("subtotal-"+id).innerHTML =
+                            "Bs " + Number(datos.subtotal).toFixed(2);
+
+                        document.getElementById("totalGeneral").innerHTML =
+                            "Bs " + Number(datos.total).toFixed(2);
+
+                    }
+
+                }
+
+        </script>
+
+    }
+
+</div>

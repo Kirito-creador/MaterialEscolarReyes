@@ -1,0 +1,168 @@
+﻿@model IEnumerable<MaterialEscolarReyes.Models.Producto>
+
+@{
+    ViewData["Title"] = ViewBag.Categoria.Nombre;
+    Layout = "~/Views/Shared/_LayoutTienda.cshtml";
+}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold">
+
+            @ViewBag.Categoria.Nombre
+
+        </h2>
+
+        <p class="text-secondary">
+
+            Productos disponibles en esta categoría
+
+        </p>
+
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+
+            No existen productos en esta categoría.
+
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+                    <div class="card h-100 shadow producto-home">
+
+                        @if (string.IsNullOrEmpty(item.ImagenPrincipal))
+                        {
+                            <img src="/images/no-image.png"
+                                 class="card-img-top"
+                                 style="height:220px;object-fit:contain;">
+                        }
+                        else
+                        {
+                            <img src="/uploads/productos/@item.ImagenPrincipal"
+                                 class="card-img-top"
+                                 style="height:220px;object-fit:contain;">
+                        }
+
+                        <div class="card-body d-flex flex-column">
+
+                            <small class="text-secondary">
+
+                                @item.Marca?.Nombre
+
+                            </small>
+
+                            <h5 class="mt-2">
+
+                                @item.Nombre
+
+                            </h5>
+
+                            <h4 class="text-primary mt-3">
+
+                                Bs @item.PrecioVenta
+
+                            </h4>
+
+                            <div class="mt-auto">
+
+                                <a asp-controller="Tienda"
+                                   asp-action="Producto"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-outline-primary w-100 mb-2">
+
+                                    Ver Producto
+
+                                </a>
+
+                                <button class="btn btn-success w-100"
+                                        onclick="agregarCarrito(@item.Id)">
+
+                                    <i class="bi bi-cart-plus"></i>
+
+                                    Añadir al Carrito
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
+@section Scripts {
+
+    <script>
+
+        async function agregarCarrito(id){
+
+            let respuesta = await fetch("/Carrito/Agregar",{
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded"
+                },
+
+                body:`id=${id}&cantidad=1`
+
+            });
+
+            let datos = await respuesta.json();
+
+            if(datos.login){
+
+                Swal.fire({
+                    icon:"warning",
+                    title:"Debes iniciar sesión",
+                    text:"Primero inicia sesión para comprar."
+                }).then(()=>{
+                    window.location="/CuentaCliente/Login";
+                });
+
+                return;
+            }
+
+            if(datos.ok){
+
+                document.getElementById("contadorCarrito").innerText = datos.total;
+
+                Swal.fire({
+                    icon:"success",
+                    title:"Producto agregado",
+                    timer:1500,
+                    showConfirmButton:false
+                });
+
+            }else{
+
+                Swal.fire(
+                    "Error",
+                    "No se pudo agregar el producto.",
+                    "error"
+                );
+
+            }
+
+        }
+
+    </script>
+
+}

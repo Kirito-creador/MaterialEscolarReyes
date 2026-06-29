@@ -1,0 +1,6 @@
+﻿namespace MaterialEscolarReyes.wwwroot
+{
+    public class manifest
+    {
+    }
+}

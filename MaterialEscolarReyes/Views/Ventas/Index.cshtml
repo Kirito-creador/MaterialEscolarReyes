@@ -1,0 +1,102 @@
+﻿@model IEnumerable<MaterialEscolarReyes.Models.Venta>
+
+@{
+    ViewData["Title"] = "Ventas";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+
+            <i class="bi bi-receipt"></i>
+
+            Gestión de Ventas
+
+        </h2>
+
+    </div>
+
+    <form method="get" class="row mb-3">
+
+        <div class="col-md-4">
+
+            <input name="buscar"
+                   class="form-control"
+                   placeholder="Buscar venta..." />
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button class="btn btn-primary w-100">
+
+                Buscar
+
+            </button>
+
+        </div>
+
+    </form>
+
+    <table class="table table-striped table-hover">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th>N°</th>
+
+                <th>Cliente</th>
+
+                <th>Fecha</th>
+
+                <th>Total</th>
+
+                <th>Acciones</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+
+                <tr>
+
+                    <td>@item.NumeroVenta</td>
+
+                    <td>@item.Cliente?.Nombre</td>
+
+                    <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+
+                    <td class="fw-bold text-success">
+
+                        Bs @item.Total
+
+                    </td>
+
+                    <td>
+
+                        <a asp-action="Details"
+                           asp-route-id="@item.Id"
+                           class="btn btn-info btn-sm">
+
+                            <i class="bi bi-eye"></i>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

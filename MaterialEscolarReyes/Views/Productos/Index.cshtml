@@ -1,0 +1,242 @@
+﻿@model IEnumerable<MaterialEscolarReyes.Models.Producto>
+
+@{
+    ViewData["Title"] = "Productos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="text-light fw-bold">
+            <i class="bi bi-box-seam"></i>
+            Productos
+        </h2>
+
+        <small class="text-secondary">
+            Administración de productos
+        </small>
+
+    </div>
+
+    <a asp-action="Create" class="btn btn-success">
+
+        <i class="bi bi-plus-circle"></i>
+
+        Nuevo Producto
+
+    </a>
+
+</div>
+
+<div class="row mb-4">
+
+    <div class="col-md-6">
+
+        <input type="text"
+               id="buscar"
+               class="form-control form-control-lg shadow-sm"
+               placeholder="🔍 Buscar por nombre, código, marca o categoría..." />
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-4 producto-item">
+
+            <div class="card dark-card h-100 shadow producto-card">
+
+                @if (string.IsNullOrEmpty(item.ImagenPrincipal))
+                {
+                    <img src="/images/no-image.png"
+                         class="card-img-top producto-img">
+                }
+                else
+                {
+                    <img src="/uploads/productos/@item.ImagenPrincipal"
+                         class="card-img-top producto-img">
+                }
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+
+                        @item.Nombre
+
+                    </h5>
+
+                    <small class="text-info">
+
+                        Código:
+                        @item.Codigo
+
+                    </small>
+
+                    <hr>
+
+                    <p>
+
+                        📂 @item.Categoria?.Nombre
+
+                    </p>
+
+                    <p>
+
+                        🏷 @item.Marca?.Nombre
+
+                    </p>
+
+                    <p>
+
+                        🚚 @item.Proveedor?.Nombre
+
+                    </p>
+                    <p class="text-secondary small">
+
+                        📅 @item.FechaRegistro.ToString("dd/MM/yyyy")
+
+                    </p>
+                   
+                    <div class="mb-2">
+
+                        <span class="fs-3 fw-bold text-success">
+
+                            Bs @item.PrecioVenta
+
+                        </span>
+
+                    </div>
+                    <p class="text-secondary mb-2">
+
+                        Compra:
+                        <strong>Bs @item.PrecioCompra</strong>
+
+                    </p>
+
+                    @if (item.Stock == 0)
+                    {
+                        <span class="badge bg-danger badge-stock">
+
+                            🔴 Sin Stock
+
+                        </span>
+                    }
+                    else if (item.Stock <= item.StockMinimo)
+                    {
+                        <span class="badge bg-warning text-dark badge-stock">
+
+                            🟠 Stock Bajo (@item.Stock)
+
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success badge-stock">
+
+                            🟢 Stock Disponible (@item.Stock)
+
+                        </span>
+                    }
+                    <p class="mt-2 mb-0">
+
+                        <strong>Stock:</strong>
+
+                        @item.Stock unidades
+
+                    </p>
+                </div>
+
+                <div class="card-footer bg-transparent border-0">
+
+                    <div class="card-footer bg-transparent border-0">
+
+                        <div class="d-grid gap-2">
+
+                            <a asp-action="Edit"
+                               asp-route-id="@item.Id"
+                               class="btn btn-outline-warning">
+
+                                <i class="bi bi-pencil-square"></i>
+
+                                Editar
+
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.Id"
+                               class="btn btn-outline-danger">
+
+                                <i class="bi bi-trash"></i>
+
+                                Eliminar
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    }
+    @if (!Model.Any())
+    {
+        <div class="col-12">
+
+            <div class="alert alert-info text-center">
+
+                <h4>
+
+                    No existen productos registrados.
+
+                </h4>
+
+                <a asp-action="Create"
+                   class="btn btn-success mt-3">
+
+                    <i class="bi bi-plus-circle"></i>
+
+                    Registrar primer producto
+
+                </a>
+
+            </div>
+
+        </div>
+    }
+</div>
+
+@section Scripts {
+
+    <script>
+
+        const buscar=document.getElementById("buscar");
+
+        buscar.addEventListener("keyup",function(){
+
+        let texto=this.value.toLowerCase();
+
+        document.querySelectorAll(".producto-item").forEach(function(card){
+
+        let nombre=card.innerText.toLowerCase();
+
+        card.style.display=
+        nombre.includes(texto)
+        ?
+        "block"
+        :
+        "none";
+
+        });
+
+        });
+
+    </script>
+
+}

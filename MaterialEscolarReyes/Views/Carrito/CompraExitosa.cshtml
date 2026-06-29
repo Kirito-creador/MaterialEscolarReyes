@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Compra Exitosa";
+    Layout = "~/Views/Shared/_LayoutTienda.cshtml";
+}
+
+<div class="container py-5 text-center">
+
+    <div class="card shadow-lg p-5">
+
+        <i class="bi bi-check-circle-fill text-success"
+           style="font-size:90px;"></i>
+
+        <h1 class="mt-4">
+
+            ¡Gracias por tu compra!
+
+        </h1>
+
+        <p class="lead">
+
+            Tu pedido fue registrado correctamente.
+
+        </p>
+
+        <a asp-controller="Tienda"
+           asp-action="Index"
+           class="btn btn-primary btn-lg mt-3">
+
+            Seguir Comprando
+
+        </a>
+
+    </div>
+
+</div>

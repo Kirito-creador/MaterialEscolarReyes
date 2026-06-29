@@ -1,0 +1,543 @@
+﻿```cshtml
+@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"] - Material Escolar Reyes</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+
+            body {
+                background: #0f172a;
+                overflow-x: hidden;
+            }
+
+            .sidebar {
+                width: 260px;
+                height: 100vh;
+                position: fixed;
+                top: 0;
+                left: 0;
+                padding-top: 20px;
+                background: #111827;
+                overflow-y: auto;
+                transition: .3s;
+                z-index: 1000;
+            }
+
+                .sidebar.hide {
+                    left: -260px;
+                }
+
+            .logo {
+                text-align: center;
+                font-size: 24px;
+                font-weight: 700;
+                color: #fff;
+                margin-bottom: 40px;
+            }
+
+            .sidebar a {
+                display: block;
+                padding: 15px 25px;
+                color: #9ca3af;
+                text-decoration: none;
+                font-size: 17px;
+                border-left: 4px solid transparent;
+                transition: .3s;
+            }
+
+                .sidebar a:hover {
+                    background: #1e293b;
+                    border-left: 4px solid #3b82f6;
+                    color: #fff;
+                }
+
+            .main {
+                margin-left: 260px;
+                padding: 25px;
+                transition: .3s;
+            }
+
+                .main.full {
+                    margin-left: 0;
+                }
+
+            .topbar {
+                background: #1e293b;
+                padding: 15px 25px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+                color: #fff;
+                position: sticky;
+                top: 15px;
+                z-index: 999;
+                box-shadow: 0 0 15px rgba(0,0,0,.25);
+            }
+
+            .user {
+                font-size: 17px;
+            }
+
+            .btn-menu {
+                border-radius: 10px;
+            }
+
+                .btn-menu:hover {
+                    transform: scale(1.05);
+                }
+
+            .stat-card {
+                background: #1e293b;
+                border: none;
+                border-radius: 20px;
+                color: white;
+                transition: .3s;
+            }
+
+                .stat-card:hover {
+                    transform: translateY(-5px);
+                }
+
+            .green {
+                background: #059669;
+            }
+
+            .yellow {
+                background: #d97706;
+            }
+
+            .red {
+                background: #dc2626;
+            }
+
+            .dark-card {
+                background: #1e293b;
+                border: none;
+                border-radius: 20px;
+                color: white;
+            }
+
+            .card-header {
+                background: #111827;
+                color: white;
+                font-weight: 600;
+                border-bottom: none;
+            }
+
+            .table-dark {
+                margin-bottom: 0;
+            }
+
+            footer {
+                margin-top: 50px;
+                text-align: center;
+                color: #9ca3af;
+            }
+
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #3b82f6;
+                border-radius: 10px;
+            }
+
+            @@media(max-width:992px) {
+
+                .sidebar {
+                    left: -260px;
+                }
+
+                    .sidebar.hide {
+                        left: 0;
+                    }
+
+                .main {
+                    margin-left: 0;
+                }
+
+                .topbar {
+                    margin-top: 10px;
+                }
+            }
+            /*==============================
+                TARJETAS MODERNAS
+            ==============================*/
+
+            .categoria-card {
+                background: #1e293b;
+                border: none;
+                border-radius: 20px;
+                color: #fff;
+                overflow: hidden;
+                transition: .35s;
+            }
+
+                .categoria-card:hover {
+                    transform: translateY(-8px);
+                    box-shadow: 0 15px 35px rgba(59,130,246,.35);
+                }
+
+                .categoria-card img {
+                    height: 220px;
+                    object-fit: cover;
+                }
+
+                .categoria-card .card-body {
+                    padding: 20px;
+                }
+
+                .categoria-card h5 {
+                    font-weight: 700;
+                }
+
+                .categoria-card .badge {
+                    font-size: .85rem;
+                }
+
+            /*==============================
+                BOTONES
+            ==============================*/
+
+            .btn-primary,
+            .btn-success,
+            .btn-warning,
+            .btn-danger {
+                border-radius: 12px;
+            }
+
+            /*==============================
+                INPUTS
+            ==============================*/
+
+            .form-control {
+                background: #0f172a;
+                border: 1px solid #334155;
+                color: white;
+            }
+
+                .form-control:focus {
+                    background: #0f172a;
+                    color: white;
+                    border-color: #3b82f6;
+                    box-shadow: 0 0 10px rgba(59,130,246,.3);
+                }
+
+                .form-control::placeholder {
+                    color: #94a3b8;
+                }
+
+            .producto-card {
+                transition: .30s;
+                border-radius: 18px;
+                overflow: hidden;
+            }
+
+                .producto-card:hover {
+                    transform: translateY(-6px);
+                    box-shadow: 0 15px 35px rgba(0,0,0,.35);
+                }
+
+            .producto-img {
+                height: 220px;
+                object-fit: cover;
+                background: #fff;
+            }
+
+            .badge-stock {
+                font-size: 14px;
+                padding: 8px 14px;
+                border-radius: 20px;
+            }
+
+            .producto-card .card-body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .producto-card h5 {
+                min-height: 55px;
+            }
+
+            .producto-card p {
+                margin-bottom: 6px;
+            }
+
+    </style>
+
+
+</head>
+
+<body>
+
+
+
+
+
+    <div class="sidebar" id="sidebar">
+
+
+        <div class="logo">
+
+            📚 Material Escolar Reyes
+
+        </div>
+
+
+
+
+        <a asp-controller="Home"
+           asp-action="Index">
+
+            <i class="bi bi-speedometer2"></i>
+
+            Dashboard
+
+        </a>
+        <a asp-controller="Categorias"
+           asp-action="Index">
+
+            <i class="bi bi-tags-fill"></i>
+
+            Categorías
+
+        </a>
+
+
+
+        <a asp-controller="Productos"
+           asp-action="Index">
+
+            <i class="bi bi-box-seam"></i>
+
+            Productos
+
+        </a>
+
+
+
+
+        <a asp-controller="Clientes"
+           asp-action="Index">
+
+            <i class="bi bi-people-fill"></i>
+
+            Clientes
+
+        </a>
+
+
+
+
+        <a asp-controller="Proveedores"
+           asp-action="Index">
+
+            <i class="bi bi-truck"></i>
+
+            Proveedores
+
+        </a>
+
+
+
+
+        <a asp-controller="Ventas"
+           asp-action="Index">
+
+            <i class="bi bi-cart-fill"></i>
+
+            Ventas
+
+        </a>
+
+
+
+
+        <a asp-controller="Reportes"
+           asp-action="Index">
+
+            <i class="bi bi-bar-chart-fill"></i>
+
+            Reportes
+
+        </a>
+
+
+
+
+        <a asp-controller="Account"
+           asp-action="Logout">
+
+            <i class="bi bi-box-arrow-left"></i>
+
+            Cerrar Sesión
+
+        </a>
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <div class="main">
+
+
+        <div class="topbar">
+
+
+            <div class="d-flex justify-content-between align-items-center">
+
+
+
+                <div>
+
+
+                    <button class="btn btn-outline-light btn-menu"
+                            onclick="toggleMenu()">
+
+                        <i class="bi bi-list"></i>
+
+                    </button>
+
+
+
+                </div>
+
+
+
+
+
+
+                <div>
+
+
+                    <h4 class="m-0 fw-bold">
+                        📚 Material Escolar Reyes
+                    </h4>
+
+
+                </div>
+
+
+
+
+
+
+                <div class="user">
+
+
+                    Bienvenido
+
+
+                    <strong>
+
+                        @Context.Session.GetString("Usuario")
+
+                    </strong>
+
+
+                    <i class="bi bi-person-circle ms-2"
+                       style="font-size:30px;color:#3B82F6;"></i>
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+        @RenderBody()
+
+
+
+
+        <footer>
+
+            Material Escolar Reyes © 2026
+
+        </footer>
+
+
+
+    </div>
+
+
+
+
+
+
+    <script>
+
+
+            function toggleMenu(){
+
+            let sidebar = document.getElementById("sidebar");
+
+            let main = document.querySelector(".main");
+
+
+            sidebar.classList.toggle("hide");
+
+            main.classList.toggle("full");
+
+
+            }
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Toastify -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    @if (TempData["Ok"] != null)
+    {
+        <script>
+            Toastify({
+            text: "@TempData["Ok"]",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#16a34a"
+            }).showToast();
+        </script>
+    }
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>
+```

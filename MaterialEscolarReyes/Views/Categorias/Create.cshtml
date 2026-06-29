@@ -1,0 +1,115 @@
+﻿@model MaterialEscolarReyes.ViewModels.CategoriaViewModel
+
+@{
+    ViewData["Title"] = "Nueva Categoría";
+}
+
+<h2 class="text-light mb-4">
+    <i class="bi bi-tags"></i>
+    Nueva Categoría
+</h2>
+
+<form asp-action="Create" enctype="multipart/form-data">
+
+    <div class="row">
+
+        <div class="col-lg-6">
+
+            <div class="card dark-card">
+
+                <div class="card-header">
+
+                    Información
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="mb-3">
+
+                        <label>Nombre</label>
+
+                        <input asp-for="Nombre"
+                               class="form-control" />
+
+                        <span asp-validation-for="Nombre"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-check form-switch mb-3">
+
+                        <input asp-for="Estado"
+                               class="form-check-input" />
+
+                        <label asp-for="Estado"
+                               class="form-check-label">
+
+                            Categoría Activa
+
+                        </label>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Imagen</label>
+
+                        <input asp-for="Imagen"
+                               type="file"
+                               class="form-control"
+                               accept="image/*"
+                               onchange="preview(event)" />
+
+                    </div>
+
+                    <div class="text-center">
+
+                        <img id="imgPreview"
+                             src="/images/no-image.png"
+                             class="img-thumbnail"
+                             style="height:200px;">
+
+                    </div>
+
+                    <hr>
+
+                    <button class="btn btn-success w-100">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Guardar Categoría
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+    <script>
+
+        function preview(event){
+
+            let reader=new FileReader();
+
+            reader.onload=function(){
+
+                document.getElementById("imgPreview").src=reader.result;
+
+            }
+
+            reader.readAsDataURL(event.target.files[0]);
+
+        }
+
+    </script>
+
+}

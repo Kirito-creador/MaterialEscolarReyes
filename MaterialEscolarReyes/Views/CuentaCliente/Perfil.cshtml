@@ -1,0 +1,128 @@
+﻿@model MaterialEscolarReyes.Models.Cliente
+
+@{
+    ViewData["Title"] = "Mi Perfil";
+    Layout = "~/Views/Shared/_LayoutTienda.cshtml";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h3 class="mb-0">
+
+                        <i class="bi bi-person-circle"></i>
+
+                        Mi Perfil
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-bold">
+
+                                Nombre
+
+                            </label>
+
+                            <input class="form-control"
+                                   value="@Model.Nombre"
+                                   readonly />
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-bold">
+
+                                Apellido
+
+                            </label>
+
+                            <input class="form-control"
+                                   value="@Model.Apellido"
+                                   readonly />
+
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Correo
+
+                        </label>
+
+                        <input class="form-control"
+                               value="@Model.Correo"
+                               readonly />
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-bold">
+
+                                Teléfono
+
+                            </label>
+
+                            <input class="form-control"
+                                   value="@Model.Telefono"
+                                   readonly />
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-bold">
+
+                                Dirección
+
+                            </label>
+
+                            <input class="form-control"
+                                   value="@Model.Direccion"
+                                   readonly />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer text-end">
+
+                    <a asp-controller="Tienda"
+                       asp-action="Index"
+                       class="btn btn-primary">
+
+                        Volver a la Tienda
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

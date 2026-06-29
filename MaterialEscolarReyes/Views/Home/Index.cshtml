@@ -1,0 +1,494 @@
+﻿```cshtml
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="text-light fw-bold">
+
+                <i class="bi bi-speedometer2"></i>
+
+                Dashboard
+
+            </h2>
+
+            <p class="text-secondary">
+
+                Bienvenido al Sistema Material Escolar Reyes
+
+            </p>
+
+        </div>
+
+        <span class="badge bg-success fs-6">
+
+            @DateTime.Now.ToString("dd/MM/yyyy")
+
+        </span>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card stat-card">
+
+                <div class="card-body">
+
+                    <h6>
+
+                        <i class="bi bi-box-seam"></i>
+
+                        Productos
+
+                    </h6>
+
+                    <h2>@ViewBag.Productos</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card stat-card green">
+
+                <div class="card-body">
+
+                    <h6>
+
+                        <i class="bi bi-people-fill"></i>
+
+                        Clientes
+
+                    </h6>
+
+                    <h2>@ViewBag.Clientes</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card stat-card yellow">
+
+                <div class="card-body">
+
+                    <h6>
+
+                        <i class="bi bi-truck"></i>
+
+                        Proveedores
+
+                    </h6>
+
+                    <h2>@ViewBag.Proveedores</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card stat-card red">
+
+                <div class="card-body">
+
+                    <h6>
+
+                        <i class="bi bi-cart-fill"></i>
+
+                        Ventas
+
+                    </h6>
+
+                    <h2>@ViewBag.Ventas</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mb-4">
+
+        <div class="col-lg-12">
+
+            <div class="alert alert-primary shadow">
+
+                <h5>
+
+                    <i class="bi bi-info-circle-fill"></i>
+
+                    Resumen del Sistema
+
+                </h5>
+
+                Productos:
+
+                <strong>@ViewBag.Productos</strong>
+
+                |
+
+                Clientes:
+
+                <strong>@ViewBag.Clientes</strong>
+
+                |
+
+                Proveedores:
+
+                <strong>@ViewBag.Proveedores</strong>
+
+                |
+
+                Ventas:
+
+                <strong>@ViewBag.Ventas</strong>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row">
+
+        <!-- Últimos Productos -->
+        <div class="col-lg-6 mb-4">
+
+            <div class="card dark-card shadow">
+
+                <div class="card-header">
+
+                    <i class="bi bi-box-seam"></i>
+
+                    Últimos Productos
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-dark table-hover">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Código</th>
+                                <th>Producto</th>
+                                <th>Stock</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var p in ViewBag.UltimosProductos)
+                            {
+                                <tr>
+
+                                    <td>@p.Codigo</td>
+
+                                    <td>@p.Nombre</td>
+
+                                    <td>
+
+                                        @if (p.Stock <= p.StockMinimo)
+                                        {
+                                            <span class="badge bg-danger">
+
+                                                @p.Stock
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+
+                                                @p.Stock
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Últimos Clientes -->
+        <div class="col-lg-6 mb-4">
+
+            <div class="card dark-card shadow">
+
+                <div class="card-header">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    Últimos Clientes
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-dark table-hover">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Nombre</th>
+
+                                <th>Correo</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var c in ViewBag.UltimosClientes)
+                            {
+                                <tr>
+
+                                    <td>@c.Nombre</td>
+
+                                    <td>@c.Correo</td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <div class="card dark-card shadow">
+
+                <div class="card-header bg-danger">
+
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                    Productos con Stock Bajo
+
+                </div>
+
+                <div class="card-body">
+
+                    @if (ViewBag.StockBajos.Count > 0)
+                    {
+                        <table class="table table-dark table-hover">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Producto</th>
+
+                                    <th>Stock</th>
+
+                                    <th>Mínimo</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var p in ViewBag.StockBajos)
+                                {
+                                    <tr>
+
+                                        <td>@p.Nombre</td>
+
+                                        <td>
+
+                                            <span class="badge bg-danger">
+
+                                                @p.Stock
+
+                                            </span>
+
+                                        </td>
+
+                                        <td>@p.StockMinimo</td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            No existen productos con stock bajo.
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row mt-4">
+
+        <div class="col-lg-6">
+
+            <div class="card dark-card shadow">
+
+                <div class="card-header bg-primary">
+
+                    <i class="bi bi-trophy-fill"></i>
+
+                    Top 5 Productos Más Vendidos
+
+                </div>
+                <div class="row mt-4">
+
+                    <div class="col-lg-12">
+
+                        <div class="card dark-card shadow">
+
+                            <div class="card-header bg-success">
+
+                                <i class="bi bi-bar-chart-fill"></i>
+
+                                Ventas por Mes
+
+                            </div>
+
+                            <div class="card-body">
+
+                                <canvas id="graficoVentas" height="100"></canvas>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-dark table-hover">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Producto</th>
+                                <th>Cantidad Vendida</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var p in ViewBag.ProductosMasVendidos)
+                            {
+                                <tr>
+
+                                    <td>@p.Producto</td>
+
+                                    <td>
+
+                                        <span class="badge bg-success">
+
+                                            @p.Cantidad
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+       
+    </div>
+    @section Scripts{
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+
+            const ctx = document.getElementById('graficoVentas');
+
+            new Chart(ctx,{
+            type:'bar',
+            data:{
+            labels:@Html.Raw(ViewBag.Meses),
+            datasets:[{
+            label:'Ventas',
+            data:@Html.Raw(ViewBag.Cantidades),
+            borderWidth:1
+            }]
+            },
+            options:{
+            responsive:true,
+            plugins:{
+            legend:{
+            display:false
+            }
+            }
+            }
+            });
+
+        </script>
+
+    }

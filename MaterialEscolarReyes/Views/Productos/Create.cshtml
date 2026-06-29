@@ -1,0 +1,248 @@
+﻿@model MaterialEscolarReyes.ViewModels.ProductoViewModel
+
+@{
+    ViewData["Title"] = "Nuevo Producto";
+}
+
+<h2 class="text-light mb-4">
+    <i class="bi bi-box-seam"></i>
+    Nuevo Producto
+</h2>
+
+<form asp-action="Create" enctype="multipart/form-data">
+
+<div class="row">
+
+<div class="col-lg-7">
+
+<div class="card dark-card">
+
+<div class="card-header">
+
+Información del Producto
+
+</div>
+
+<div class="card-body">
+                    <div class="mb-3">
+
+                        <label>Código</label>
+
+                        <input asp-for="Codigo"
+                               class="form-control"
+                               readonly />
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Nombre</label>
+
+                        <input asp-for="Nombre" class="form-control" />
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Categoría</label>
+
+                        <select asp-for="CategoriaId"
+                                asp-items="ViewBag.Categorias"
+                                class="form-select">
+
+                            <option value="">Seleccione...</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Marca</label>
+
+                        <select asp-for="MarcaId"
+                                asp-items="ViewBag.Marcas"
+                                class="form-select">
+
+                            <option value="">Seleccione...</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Proveedor</label>
+
+                        <select asp-for="ProveedorId"
+                                asp-items="ViewBag.Proveedores"
+                                class="form-select">
+
+                            <option value="">Seleccione...</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Descripción</label>
+
+                        <textarea asp-for="Descripcion"
+                                  rows="5"
+                                  class="form-control"></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-lg-5">
+
+            <div class="card dark-card">
+
+                <div class="card-header">
+
+                    Inventario
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col">
+
+                            <label>Precio Compra</label>
+
+                            <input asp-for="PrecioCompra"
+                                   class="form-control" />
+
+                        </div>
+
+                        <div class="col">
+
+                            <label>Precio Venta</label>
+
+                            <input asp-for="PrecioVenta"
+                                   class="form-control" />
+
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <div class="row">
+
+                        <div class="col">
+
+                            <label>Stock</label>
+
+                            <input asp-for="Stock"
+                                   class="form-control" />
+
+                        </div>
+
+                        <div class="col">
+
+                            <label>Stock Mínimo</label>
+
+                            <input asp-for="StockMinimo"
+                                   class="form-control" />
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+                    <label>Imagen Principal</label>
+
+                    <input asp-for="ImagenPrincipal"
+                           type="file"
+                           class="form-control"
+                           accept="image/*"
+                           onchange="preview1(event)" />
+
+                    <div class="text-center mt-3">
+
+                        <img id="img1"
+                             src="/images/no-image.png"
+                             class="img-thumbnail"
+                             style="height:180px;">
+
+                    </div>
+
+                    <hr>
+
+                    <label>Imagen Secundaria</label>
+
+                    <input asp-for="ImagenSecundaria"
+                           type="file"
+                           class="form-control"
+                           accept="image/*"
+                           onchange="preview2(event)" />
+
+                    <div class="text-center mt-3">
+
+                        <img id="img2"
+                             src="/images/no-image.png"
+                             class="img-thumbnail"
+                             style="height:180px;">
+
+                    </div>
+
+                    <hr>
+
+                    <button class="btn btn-success w-100">
+
+                        Guardar Producto
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+@section Scripts {
+
+    <script>
+
+        function preview1(event){
+
+        let reader=new FileReader();
+
+        reader.onload=function(){
+
+        document.getElementById("img1").src=reader.result;
+
+        }
+
+        reader.readAsDataURL(event.target.files[0]);
+
+        }
+
+        function preview2(event){
+
+        let reader=new FileReader();
+
+        reader.onload=function(){
+
+        document.getElementById("img2").src=reader.result;
+
+        }
+
+        reader.readAsDataURL(event.target.files[0]);
+
+        }
+
+    </script>
+
+}

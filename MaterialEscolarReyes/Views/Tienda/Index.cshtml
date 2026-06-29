@@ -1,0 +1,216 @@
+﻿@model IEnumerable<MaterialEscolarReyes.Models.Producto>
+
+@{
+    ViewData["Title"] = "Inicio";
+    Layout = "~/Views/Shared/_LayoutTienda.cshtml";
+}
+
+<section class="hero">
+
+    <img src="~/images/banner.png"
+         class="img-fluid w-100 rounded shadow">
+
+</section>
+<section class="container py-5">
+
+    <div class="row text-center">
+
+        <div class="col-md-3 mb-3">
+
+            <i class="bi bi-truck fs-1 text-primary"></i>
+
+            <h5 class="mt-3">Entrega Rápida</h5>
+
+            <small class="text-secondary">
+                Envíos a todo el país.
+            </small>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <i class="bi bi-shield-check fs-1 text-success"></i>
+
+            <h5 class="mt-3">Compra Segura</h5>
+
+            <small class="text-secondary">
+                Protección en todas tus compras.
+            </small>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <i class="bi bi-credit-card fs-1 text-warning"></i>
+
+            <h5 class="mt-3">Pagos Flexibles</h5>
+
+            <small class="text-secondary">
+                Distintos métodos de pago.
+            </small>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <i class="bi bi-headset fs-1 text-danger"></i>
+
+            <h5 class="mt-3">Soporte</h5>
+
+            <small class="text-secondary">
+                Atención personalizada.
+            </small>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="container mt-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold">
+
+            Categorías
+
+        </h2>
+
+        <p class="text-secondary">
+
+            Todo lo que necesitas para estudiar
+
+        </p>
+
+    </div>
+
+    <div class="row">
+
+        @foreach (var categoria in ViewBag.Categorias)
+        {
+
+            <div class="col-lg-2 col-md-4 col-6 mb-4">
+
+              <a asp-controller="Tienda"
+                     asp-action="Categoria"
+                    asp-route-id="@categoria.Id"
+                class="text-decoration-none text-dark">
+
+    <div class="card categoria-home shadow-sm">
+
+                    @if (string.IsNullOrEmpty(categoria.Imagen))
+                    {
+                        <img src="/images/no-image.png"
+                             class="card-img-top">
+                    }
+                    else
+                    {
+                        <img src="/uploads/categorias/@categoria.Imagen"
+                             class="card-img-top">
+                    }
+
+                    <div class="card-body text-center">
+
+                        <strong>
+
+                            @categoria.Nombre
+
+                        </strong>
+
+                    </div>
+
+                </div>
+                </a>
+
+            </div>
+
+        }
+
+    </div>
+
+</section>
+
+<section class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+
+            Productos Destacados
+
+        </h2>
+        <a asp-controller="Tienda"
+           asp-action="Productos"
+           class="btn btn-primary">
+
+            Ver Todo
+
+        </a>
+
+    </div>
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+
+            <div class="col-lg-3 col-md-6 mb-4">
+
+                <div class="card producto-home shadow">
+
+                    <span class="badge bg-danger position-absolute m-2">
+                        Nuevo
+                    </span>
+
+                    @if (string.IsNullOrEmpty(item.ImagenPrincipal))
+                    {
+                        <img src="/images/no-image.png"
+                             class="card-img-top">
+                    }
+                    else
+                    {
+                        <img src="/uploads/productos/@item.ImagenPrincipal"
+                             class="card-img-top">
+                    }
+
+                    <div class="card-body">
+
+                        <h5>
+
+                            @item.Nombre
+
+                        </h5>
+
+                        <small class="text-secondary">
+
+                            @item.Marca?.Nombre
+
+                        </small>
+
+                        <h4 class="text-primary mt-3">
+
+                            Bs @item.PrecioVenta
+
+                        </h4>
+
+                        <a asp-controller="Tienda"
+                           asp-action="Producto"
+                           asp-route-id="@item.Id"
+                           class="btn btn-primary w-100 mt-3">
+
+                            Ver Producto
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+
+</section>

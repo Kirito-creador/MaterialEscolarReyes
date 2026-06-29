@@ -1,0 +1,91 @@
+﻿@model MaterialEscolarReyes.ViewModels.LoginClienteViewModel
+
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = "~/Views/Shared/_LayoutTienda.cshtml";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-5">
+
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <div class="card-body p-5">
+
+                    <h2 class="text-center fw-bold mb-4">
+
+                        Iniciar Sesión
+
+                    </h2>
+
+                    <form asp-action="Login" method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Correo"></label>
+
+                            <input asp-for="Correo"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Correo"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label asp-for="Password"></label>
+
+                            <input asp-for="Password"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <button class="btn btn-primary w-100">
+
+                            Iniciar Sesión
+
+                        </button>
+
+                    </form>
+
+                    <hr>
+
+                    <div class="text-center">
+
+                        ¿No tienes cuenta?
+
+                        <a asp-action="Registro">
+
+                            Crear una
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

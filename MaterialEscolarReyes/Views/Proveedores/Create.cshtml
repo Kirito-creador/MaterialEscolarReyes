@@ -1,0 +1,78 @@
+﻿@model MaterialEscolarReyes.Models.Proveedor
+
+@{
+    ViewData["Title"] = "Nuevo Proveedor";
+}
+
+<h2 class="mb-4">
+    <i class="bi bi-truck"></i>
+    Nuevo Proveedor
+</h2>
+
+<form asp-action="Create">
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <div class="mb-3">
+
+                <label asp-for="Nombre" class="form-label"></label>
+
+                <input asp-for="Nombre" class="form-control" />
+
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label asp-for="Telefono" class="form-label"></label>
+
+                <input asp-for="Telefono" class="form-control" />
+
+            </div>
+
+            <div class="mb-3">
+
+                <label asp-for="Correo" class="form-label"></label>
+
+                <input asp-for="Correo" class="form-control" />
+
+            </div>
+
+            <div class="mb-3">
+
+                <label asp-for="Direccion" class="form-label"></label>
+
+                <textarea asp-for="Direccion" class="form-control"></textarea>
+
+            </div>
+
+            <hr />
+
+            <button type="submit" class="btn btn-success">
+
+                <i class="bi bi-check-circle"></i>
+
+                Guardar
+
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+
+                Cancelar
+
+            </a>
+
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

@@ -1,0 +1,64 @@
+﻿@model MaterialEscolarReyes.Models.Proveedor
+
+@{
+    ViewData["Title"] = "Detalle";
+}
+
+<div class="card shadow">
+
+    <div class="card-header bg-primary text-white">
+
+        <h3>
+
+            Información del Proveedor
+
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <p>
+
+            <strong>Nombre:</strong>
+
+            @Model.Nombre
+
+        </p>
+
+        <p>
+
+            <strong>Correo:</strong>
+
+            @Model.Correo
+
+        </p>
+
+        <p>
+
+            <strong>Teléfono:</strong>
+
+            @Model.Telefono
+
+        </p>
+
+        <p>
+
+            <strong>Dirección:</strong>
+
+            @Model.Direccion
+
+        </p>
+
+        <hr />
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            Volver
+
+        </a>
+
+    </div>
+
+</div>

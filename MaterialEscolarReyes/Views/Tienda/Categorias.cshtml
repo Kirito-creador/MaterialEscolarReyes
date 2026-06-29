@@ -1,0 +1,79 @@
+﻿@model IEnumerable<MaterialEscolarReyes.Models.Categoria>
+
+@{
+    ViewData["Title"] = "Categorías";
+    Layout = "~/Views/Shared/_LayoutTienda.cshtml";
+}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold">
+
+            <i class="bi bi-grid-fill"></i>
+
+            Categorías
+
+        </h2>
+
+        <p class="text-secondary">
+
+            Selecciona una categoría para ver sus productos.
+
+        </p>
+
+    </div>
+
+    <div class="row">
+
+        @foreach (var categoria in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+                <a asp-controller="Tienda"
+                   asp-action="Categoria"
+                   asp-route-id="@categoria.Id"
+                   class="text-decoration-none text-dark">
+
+                    <div class="card shadow categoria-home h-100">
+
+                        @if (string.IsNullOrEmpty(categoria.Imagen))
+                        {
+                            <img src="/images/no-image.png"
+                                 class="card-img-top"
+                                 style="height:220px;object-fit:contain;">
+                        }
+                        else
+                        {
+                            <img src="/uploads/categorias/@categoria.Imagen"
+                                 class="card-img-top"
+                                 style="height:220px;object-fit:contain;">
+                        }
+
+                        <div class="card-body text-center">
+
+                            <h5 class="fw-bold">
+
+                                @categoria.Nombre
+
+                            </h5>
+
+                            <small class="text-muted">
+
+                                Ver productos
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

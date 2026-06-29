@@ -1,0 +1,136 @@
+﻿@model MaterialEscolarReyes.ViewModels.CategoriaViewModel
+
+@{
+    ViewData["Title"] = "Editar Categoría";
+}
+
+<div class="card dark-card shadow-lg">
+
+    <div class="card-header">
+
+        <h3 class="m-0">
+            <i class="bi bi-pencil-square"></i>
+            Editar Categoría
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <form asp-action="Edit" enctype="multipart/form-data">
+
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="ImagenActual" type="hidden" />
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Nombre
+                </label>
+
+                <input asp-for="Nombre" class="form-control" />
+
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+
+            </div>
+
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Imagen actual
+                </label>
+
+                <div class="text-center">
+
+                    @if (!string.IsNullOrEmpty(Model.ImagenActual))
+                    {
+                        <img src="/uploads/categorias/@Model.ImagenActual"
+                             id="preview"
+                             class="img-thumbnail"
+                             style="max-height:220px;" />
+                    }
+                    else
+                    {
+                        <img src="/images/no-image.png"
+                             id="preview"
+                             class="img-thumbnail"
+                             style="max-height:220px;" />
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Cambiar imagen
+
+                </label>
+
+                <input asp-for="Imagen"
+                       class="form-control"
+                       type="file"
+                       accept="image/*"
+                       onchange="previewImage(event)" />
+
+            </div>
+
+            <div class="form-check form-switch mb-4">
+
+                <input asp-for="Estado"
+                       class="form-check-input" />
+
+                <label class="form-check-label">
+
+                    Categoría Activa
+
+                </label>
+
+            </div>
+
+            <button class="btn btn-warning">
+
+                <i class="bi bi-check-circle"></i>
+
+                Guardar cambios
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Cancelar
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        function previewImage(event){
+
+            let reader=new FileReader();
+
+            reader.onload=function(){
+
+                document.getElementById("preview").src=reader.result;
+
+            }
+
+            reader.readAsDataURL(event.target.files[0]);
+
+        }
+
+    </script>
+
+}
