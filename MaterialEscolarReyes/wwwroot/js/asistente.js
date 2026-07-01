@@ -1,13 +1,22 @@
-﻿// ===============================
-// ASISTENTE DE VOZ
-// ===============================
+﻿document.addEventListener("DOMContentLoaded", () => {
 
-const boton = document.getElementById("btnAsistente");
-const estado = document.getElementById("estadoVoz");
+    const boton = document.getElementById("btnAsistente");
+    const estado = document.getElementById("estadoVoz");
 
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    if (!boton || !estado)
+        return;
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+        estado.style.display = "block";
+        estado.innerHTML = "Tu navegador no soporta reconocimiento de voz.";
+
+        return;
+    }
 
     const reconocimiento = new SpeechRecognition();
 
@@ -15,7 +24,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     reconocimiento.continuous = false;
     reconocimiento.interimResults = false;
 
-    boton.addEventListener("click", () => {
+    boton.onclick = function () {
 
         estado.style.display = "block";
         estado.innerHTML = "🎤 Escuchando...";
@@ -23,133 +32,100 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
         reconocimiento.start();
 
-    });
+    };
 
     reconocimiento.onresult = function (event) {
 
+        boton.classList.remove("escuchando");
+
         let texto = event.results[0][0].transcript.toLowerCase();
 
-        estado.innerHTML = "✔ " + texto;
+        estado.innerHTML = texto;
 
         ejecutarComando(texto);
+
+        setTimeout(() => {
+
+            estado.style.display = "none";
+
+        }, 3000);
 
     };
 
     reconocimiento.onerror = function () {
 
-        estado.innerHTML = "❌ No se entendió";
-
         boton.classList.remove("escuchando");
+
+        estado.innerHTML = "No pude entender.";
 
         setTimeout(() => {
 
             estado.style.display = "none";
 
-        }, 2000);
+        }, 3000);
 
     };
 
-    reconocimiento.onend = function () {
+    function ejecutarComando(texto) {
 
-        boton.classList.remove("escuchando");
+        if (texto.includes("inicio")) {
 
-        setTimeout(() => {
+            location.href = "/Tienda";
 
-            estado.style.display = "none";
+            return;
 
-        }, 2000);
+        }
 
-    };
+        if (texto.includes("producto")) {
 
-}
-else {
+            location.href = "/Tienda/Productos";
 
-    alert("Este navegador no soporta reconocimiento de voz.");
+            return;
 
-}
+        }
 
+        if (texto.includes("categor")) {
 
+            location.href = "/Tienda/Categorias";
 
-// ===============================
-// COMANDOS
-// ===============================
+            return;
 
-function ejecutarComando(texto) {
+        }
 
-    // INICIO
-    if (texto.includes("inicio")) {
+        if (texto.includes("oferta")) {
 
-        window.location = "/Tienda";
+            location.href = "/Tienda/Ofertas";
 
-        return;
+            return;
 
-    }
+        }
 
-    // PRODUCTOS
-    if (texto.includes("producto")) {
+        if (texto.includes("contacto")) {
 
-        window.location = "/Tienda/Productos";
+            location.href = "/Tienda/Contacto";
 
-        return;
+            return;
 
-    }
+        }
 
-    // CATEGORÍAS
-    if (texto.includes("categoría") || texto.includes("categorias")) {
+        if (texto.includes("carrito")) {
 
-        window.location = "/Tienda/Categorias";
+            location.href = "/Carrito";
 
-        return;
+            return;
 
-    }
+        }
 
-    // OFERTAS
-    if (texto.includes("oferta")) {
+        if (texto.startsWith("buscar")) {
 
-        window.location = "/Tienda/Ofertas";
+            let buscar = texto.replace("buscar", "").trim();
 
-        return;
+            location.href = "/Tienda/Productos?buscar=" + encodeURIComponent(buscar);
 
-    }
+            return;
 
-    // CONTACTO
-    if (texto.includes("contacto")) {
-
-        window.location = "/Tienda/Contacto";
-
-        return;
+        }
 
     }
 
-    // CARRITO
-    if (texto.includes("carrito")) {
-
-        window.location = "/Carrito";
-
-        return;
-
-    }
-
-    // LOGIN
-    if (texto.includes("iniciar sesión") || texto.includes("mi cuenta")) {
-
-        window.location = "/CuentaCliente/Login";
-
-        return;
-
-    }
-
-    // BUSCAR
-    if (texto.startsWith("buscar ")) {
-
-        let buscar = texto.replace("buscar ", "");
-
-        window.location = "/Tienda/Productos?buscar=" + encodeURIComponent(buscar);
-
-        return;
-
-    }
-
-    estado.innerHTML = "No conozco ese comando.";
-
-}
+});

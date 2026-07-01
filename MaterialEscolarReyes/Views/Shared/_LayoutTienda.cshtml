@@ -33,6 +33,15 @@
 
 <body>
 
+    <!-- Asistente por voz -->
+    <button id="btnAsistente" class="btn-asistente" type="button">
+        <i class="bi bi-mic-fill"></i>
+    </button>
+
+    <div id="estadoVoz">
+        Presiona el micrófono
+    </div>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
 
         <div class="container">
@@ -321,22 +330,8 @@ else
     navigator.serviceWorker.register('/service-worker.js');
     }
 </script>
-<!-- Asistente de Voz -->
-
-<button id="btnAsistente" class="btn-asistente">
-
-    <i class="bi bi-mic-fill"></i>
-
-</button>
-
-<div id="estadoVoz">
-
-    Presiona el micrófono
-
-</div>
-<h1 style="position:fixed;top:10px;left:10px;background:red;color:white;z-index:999999;">
-    PRUEBA LAYOUT
-</h1>
 <script src="~/js/asistente.js"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

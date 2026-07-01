@@ -75,9 +75,9 @@ body {
     .categoria-home img {
         transition: .3s;
     }
-/* ============================= */
-/* ASISTENTE DE VOZ */
-/* ============================= */
+/*==========================
+  ASISTENTE DE VOZ
+==========================*/
 
 .btn-asistente {
     position: fixed;
@@ -91,8 +91,8 @@ body {
     color: white;
     font-size: 28px;
     cursor: pointer;
-    z-index: 9999;
-    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    z-index: 99999;
+    box-shadow: 0 8px 20px rgba(0,0,0,.30);
     transition: .3s;
 }
 
@@ -102,23 +102,7 @@ body {
 
     .btn-asistente.escuchando {
         background: #dc3545;
-        animation: pulse 1s infinite;
     }
-
-@keyframes pulse {
-
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.12);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
 
 #estadoVoz {
     position: fixed;
@@ -129,6 +113,5 @@ body {
     padding: 12px 18px;
     border-radius: 10px;
     display: none;
-    z-index: 9999;
-    font-weight: 600;
+    z-index: 99999;
 }
