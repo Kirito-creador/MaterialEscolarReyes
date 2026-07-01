@@ -1,9 +1,4 @@
-﻿const boton = document.getElementById("btnAsistente");
-
-const estado = document.getElementById("estadoVoz");
-
-console.log("Asistente cargado");
-// ===============================
+﻿// ===============================
 // ASISTENTE DE VOZ
 // ===============================
 
