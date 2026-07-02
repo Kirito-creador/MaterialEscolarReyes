@@ -77,41 +77,4 @@ body {
     }
 /*==========================
   ASISTENTE DE VOZ
-==========================*/
-
-.btn-asistente {
-    position: fixed;
-    right: 25px;
-    bottom: 25px;
-    width: 70px;
-    height: 70px;
-    border: none;
-    border-radius: 50%;
-    background: #0d6efd;
-    color: white;
-    font-size: 28px;
-    cursor: pointer;
-    z-index: 99999;
-    box-shadow: 0 8px 20px rgba(0,0,0,.30);
-    transition: .3s;
-}
-
-    .btn-asistente:hover {
-        transform: scale(1.08);
-    }
-
-    .btn-asistente.escuchando {
-        background: #dc3545;
-    }
-
-#estadoVoz {
-    position: fixed;
-    right: 25px;
-    bottom: 105px;
-    background: #212529;
-    color: white;
-    padding: 12px 18px;
-    border-radius: 10px;
-    display: none;
-    z-index: 99999;
-}
+======
