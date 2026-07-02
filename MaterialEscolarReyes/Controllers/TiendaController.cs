@@ -150,5 +150,10 @@ namespace MaterialEscolarReyes.Controllers
 
             return View();
         }
+        public IActionResult Contacto()
+        {
+            return View();
+        }
     }
+
 }
