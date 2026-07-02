@@ -244,10 +244,14 @@ namespace MaterialEscolarReyes.Controllers
                 {
                     page.Margin(30);
 
+                    //=========================
+                    // ENCABEZADO
+                    //=========================
+
                     page.Header().Column(col =>
                     {
                         col.Item()
-                       .AlignCenter()
+                            .AlignCenter()
                             .Height(70)
                             .Image(
                                 System.IO.File.ReadAllBytes(
@@ -255,8 +259,7 @@ namespace MaterialEscolarReyes.Controllers
                                         Directory.GetCurrentDirectory(),
                                         "wwwroot",
                                         "images",
-                                        "logo.png"
-                                    )),
+                                        "logo.png")),
                                 ImageScaling.FitHeight);
 
                         col.Item()
@@ -276,14 +279,39 @@ namespace MaterialEscolarReyes.Controllers
                             .FontSize(18)
                             .Bold();
 
+                        col.Item().PaddingBottom(10);
+
+                        col.Item()
+                            .Border(1)
+                            .BorderColor(Colors.Grey.Lighten2)
+                            .Padding(8)
+                            .Row(row =>
+                            {
+                                row.RelativeItem()
+                                    .Text($"Fecha: {DateTime.Now:dd/MM/yyyy}");
+
+                                row.RelativeItem()
+                                    .AlignCenter()
+                                    .Text($"Hora: {DateTime.Now:HH:mm}");
+
+                                row.RelativeItem()
+                                    .AlignRight()
+                                    .Text($"Productos: {productos.Count}");
+                            });
+
                         col.Item().PaddingBottom(15);
                     });
+
+                    //=========================
+                    // TABLA
+                    //=========================
+
                     page.Content().Table(tabla =>
                     {
                         tabla.ColumnsDefinition(columns =>
                         {
                             columns.RelativeColumn();
-                            columns.RelativeColumn();
+                            columns.RelativeColumn(2);
                             columns.RelativeColumn();
                             columns.RelativeColumn();
                             columns.RelativeColumn();
@@ -291,36 +319,102 @@ namespace MaterialEscolarReyes.Controllers
 
                         tabla.Header(header =>
                         {
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Código").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Código")
+                                .FontColor(Colors.White)
+                                .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Producto").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Producto")
+                                .FontColor(Colors.White)
+                                .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Categoría").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Categoría")
+                                .FontColor(Colors.White)
+                                .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Precio").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Precio")
+                                .FontColor(Colors.White)
+                                .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Stock").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Stock")
+                                .FontColor(Colors.White)
+                                .Bold();
                         });
+
+                        int fila = 0;
 
                         foreach (var p in productos)
                         {
-                            tabla.Cell().Padding(4).Text(p.Codigo);
+                            var color = fila % 2 == 0
+                                ? Colors.White
+                                : Colors.Grey.Lighten4;
 
-                            tabla.Cell().Padding(4).Text(p.Nombre);
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text(p.Codigo);
 
-                            tabla.Cell().Padding(4).Text(p.Categoria?.Nombre ?? "");
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text(p.Nombre);
 
-                            tabla.Cell().Padding(4).Text($"Bs {p.PrecioVenta:N2}");
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text(p.Categoria?.Nombre ?? "-");
 
-                            tabla.Cell().Padding(4).Text(p.Stock.ToString());
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text($"Bs {p.PrecioVenta:N2}");
+
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text(p.Stock.ToString());
+
+                            fila++;
                         }
-
                     });
+
+                    //=========================
+                    // PIE
+                    //=========================
 
                     page.Footer().Row(row =>
                     {
@@ -341,13 +435,14 @@ namespace MaterialEscolarReyes.Controllers
                                 x.TotalPages();
                             });
                     });
-                });
 
+                });
             });
 
             var bytes = pdf.GeneratePdf();
 
-            return File(bytes,
+            return File(
+                bytes,
                 "application/pdf",
                 "ReporteProductos.pdf");
         }
@@ -361,7 +456,9 @@ namespace MaterialEscolarReyes.Controllers
                 {
                     page.Margin(30);
 
-                    // ================= HEADER =================
+                    //=========================
+                    // ENCABEZADO
+                    //=========================
 
                     page.Header().Column(col =>
                     {
@@ -399,24 +496,27 @@ namespace MaterialEscolarReyes.Controllers
                         col.Item()
                             .Border(1)
                             .BorderColor(Colors.Grey.Lighten2)
-                            .Padding(10)
+                            .Padding(8)
                             .Row(row =>
                             {
                                 row.RelativeItem()
-                                    .Text($"📅 Fecha: {DateTime.Now:dd/MM/yyyy}");
+                                    .Text($"Fecha: {DateTime.Now:dd/MM/yyyy}");
 
                                 row.RelativeItem()
-                                    .Text($"🕒 Hora: {DateTime.Now:HH:mm}");
+                                    .AlignCenter()
+                                    .Text($"Hora: {DateTime.Now:HH:mm}");
 
                                 row.RelativeItem()
                                     .AlignRight()
-                                    .Text($"👥 Clientes: {clientes.Count}");
+                                    .Text($"Clientes: {clientes.Count}");
                             });
 
                         col.Item().PaddingBottom(15);
                     });
 
-                    // ================= TABLA =================
+                    //=========================
+                    // TABLA
+                    //=========================
 
                     page.Content().Table(tabla =>
                     {
@@ -430,44 +530,86 @@ namespace MaterialEscolarReyes.Controllers
 
                         tabla.Header(header =>
                         {
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Cliente")
                                 .FontColor(Colors.White)
                                 .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Correo")
                                 .FontColor(Colors.White)
                                 .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Teléfono")
                                 .FontColor(Colors.White)
                                 .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Dirección")
                                 .FontColor(Colors.White)
                                 .Bold();
                         });
 
+                        int fila = 0;
+
                         foreach (var c in clientes)
                         {
-                            tabla.Cell().Padding(4)
+                            var color = fila % 2 == 0
+                                ? Colors.White
+                                : Colors.Grey.Lighten4;
+
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text($"{c.Nombre} {c.Apellido}");
 
-                            tabla.Cell().Padding(4)
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text(c.Correo);
 
-                            tabla.Cell().Padding(4)
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text(c.Telefono ?? "-");
 
-                            tabla.Cell().Padding(4)
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text(c.Direccion ?? "-");
+
+                            fila++;
                         }
                     });
 
-                    // ================= FOOTER =================
+                    //=========================
+                    // PIE
+                    //=========================
 
                     page.Footer().Row(row =>
                     {
@@ -506,9 +648,9 @@ namespace MaterialEscolarReyes.Controllers
                 {
                     page.Margin(30);
 
-                    //======================
+                    //=========================
                     // ENCABEZADO
-                    //======================
+                    //=========================
 
                     page.Header().Column(col =>
                     {
@@ -546,26 +688,27 @@ namespace MaterialEscolarReyes.Controllers
                         col.Item()
                             .Border(1)
                             .BorderColor(Colors.Grey.Lighten2)
-                            .Padding(10)
+                            .Padding(8)
                             .Row(row =>
                             {
                                 row.RelativeItem()
-                                    .Text($"📅 Fecha: {DateTime.Now:dd/MM/yyyy}");
+                                    .Text($"Fecha: {DateTime.Now:dd/MM/yyyy}");
 
                                 row.RelativeItem()
-                                    .Text($"🕒 Hora: {DateTime.Now:HH:mm}");
+                                    .AlignCenter()
+                                    .Text($"Hora: {DateTime.Now:HH:mm}");
 
                                 row.RelativeItem()
                                     .AlignRight()
-                                    .Text($"🏢 Proveedores: {proveedores.Count}");
+                                    .Text($"Proveedores: {proveedores.Count}");
                             });
 
                         col.Item().PaddingBottom(15);
                     });
 
-                    //======================
+                    //=========================
                     // TABLA
-                    //======================
+                    //=========================
 
                     page.Content().Table(tabla =>
                     {
@@ -579,46 +722,86 @@ namespace MaterialEscolarReyes.Controllers
 
                         tabla.Header(header =>
                         {
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Proveedor")
                                 .FontColor(Colors.White)
                                 .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Correo")
                                 .FontColor(Colors.White)
                                 .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Teléfono")
                                 .FontColor(Colors.White)
                                 .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Dirección")
                                 .FontColor(Colors.White)
                                 .Bold();
                         });
 
+                        int fila = 0;
+
                         foreach (var p in proveedores)
                         {
-                            tabla.Cell().Padding(4)
+                            var color = fila % 2 == 0
+                                ? Colors.White
+                                : Colors.Grey.Lighten4;
+
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text(p.Nombre);
 
-                            tabla.Cell().Padding(4)
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text(p.Correo ?? "-");
 
-                            tabla.Cell().Padding(4)
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text(p.Telefono ?? "-");
 
-                            tabla.Cell().Padding(4)
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text(p.Direccion ?? "-");
+
+                            fila++;
                         }
                     });
 
-                    //======================
+                    //=========================
                     // PIE
-                    //======================
+                    //=========================
 
                     page.Footer().Row(row =>
                     {
@@ -639,7 +822,6 @@ namespace MaterialEscolarReyes.Controllers
                                 x.TotalPages();
                             });
                     });
-
                 });
             });
 
@@ -703,13 +885,13 @@ namespace MaterialEscolarReyes.Controllers
                         col.Item()
                             .Border(1)
                             .BorderColor(Colors.Grey.Lighten2)
-                            .Padding(10)
+                            .Padding(8)
                             .Column(info =>
                             {
-                                info.Item().Text($"📅 Fecha: {DateTime.Now:dd/MM/yyyy}");
-                                info.Item().Text($"🕒 Hora: {DateTime.Now:HH:mm}");
-                                info.Item().Text($"🧾 Total de ventas: {ventas.Count}");
-                                info.Item().Text($"💰 Monto vendido: Bs {montoTotal:N2}");
+                                info.Item().Text($"Fecha: {DateTime.Now:dd/MM/yyyy}");
+                                info.Item().Text($"Hora: {DateTime.Now:HH:mm}");
+                                info.Item().Text($"Ventas registradas: {ventas.Count}");
+                                info.Item().Text($"Monto total: Bs {montoTotal:N2}");
                             });
 
                         col.Item().PaddingBottom(15);
@@ -731,40 +913,80 @@ namespace MaterialEscolarReyes.Controllers
 
                         tabla.Header(header =>
                         {
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Venta")
                                 .FontColor(Colors.White)
                                 .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Cliente")
                                 .FontColor(Colors.White)
                                 .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Fecha")
                                 .FontColor(Colors.White)
                                 .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
                                 .Text("Total")
                                 .FontColor(Colors.White)
                                 .Bold();
                         });
 
+                        int fila = 0;
+
                         foreach (var v in ventas)
                         {
-                            tabla.Cell().Padding(4)
+                            var color = fila % 2 == 0
+                                ? Colors.White
+                                : Colors.Grey.Lighten4;
+
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text(v.NumeroVenta);
 
-                            tabla.Cell().Padding(4)
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text($"{v.Cliente?.Nombre} {v.Cliente?.Apellido}");
 
-                            tabla.Cell().Padding(4)
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text(v.Fecha.ToString("dd/MM/yyyy"));
 
-                            tabla.Cell().Padding(4)
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
                                 .Text($"Bs {v.Total:N2}");
+
+                            fila++;
                         }
                     });
 
@@ -791,7 +1013,6 @@ namespace MaterialEscolarReyes.Controllers
                                 x.TotalPages();
                             });
                     });
-
                 });
             });
 
@@ -812,9 +1033,9 @@ namespace MaterialEscolarReyes.Controllers
                 {
                     page.Margin(30);
 
-                    //==============================
+                    //=========================
                     // ENCABEZADO
-                    //==============================
+                    //=========================
 
                     page.Header().Column(col =>
                     {
@@ -852,20 +1073,27 @@ namespace MaterialEscolarReyes.Controllers
                         col.Item()
                             .Border(1)
                             .BorderColor(Colors.Grey.Lighten2)
-                            .Padding(10)
-                            .Column(info =>
+                            .Padding(8)
+                            .Row(row =>
                             {
-                                info.Item().Text($"📅 Fecha: {DateTime.Now:dd/MM/yyyy}");
-                                info.Item().Text($"🕒 Hora: {DateTime.Now:HH:mm}");
-                                info.Item().Text($"📦 Productos: {productos.Count}");
+                                row.RelativeItem()
+                                    .Text($"Fecha: {DateTime.Now:dd/MM/yyyy}");
+
+                                row.RelativeItem()
+                                    .AlignCenter()
+                                    .Text($"Hora: {DateTime.Now:HH:mm}");
+
+                                row.RelativeItem()
+                                    .AlignRight()
+                                    .Text($"Productos: {productos.Count}");
                             });
 
                         col.Item().PaddingBottom(15);
                     });
 
-                    //==============================
+                    //=========================
                     // TABLA
-                    //==============================
+                    //=========================
 
                     page.Content().Table(tabla =>
                     {
@@ -880,48 +1108,111 @@ namespace MaterialEscolarReyes.Controllers
 
                         tabla.Header(header =>
                         {
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Código").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Código")
+                                .FontColor(Colors.White)
+                                .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Producto").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Producto")
+                                .FontColor(Colors.White)
+                                .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Stock").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Stock")
+                                .FontColor(Colors.White)
+                                .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Mínimo").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Mínimo")
+                                .FontColor(Colors.White)
+                                .Bold();
 
-                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
-                                .Text("Estado").FontColor(Colors.White).Bold();
+                            header.Cell()
+                                .Background(Colors.Blue.Darken2)
+                                .Border(1)
+                                .BorderColor(Colors.White)
+                                .Padding(6)
+                                .Text("Estado")
+                                .FontColor(Colors.White)
+                                .Bold();
                         });
+
+                        int fila = 0;
 
                         foreach (var p in productos)
                         {
-                            string estado = "";
+                            var color = fila % 2 == 0
+                                ? Colors.White
+                                : Colors.Grey.Lighten4;
+
+                            string estado;
 
                             if (p.Stock == 0)
-                                estado = "🔴 Agotado";
+                                estado = "Agotado";
                             else if (p.Stock <= p.StockMinimo)
-                                estado = "🟡 Stock Bajo";
+                                estado = "Stock Bajo";
                             else
-                                estado = "🟢 Disponible";
+                                estado = "Disponible";
 
-                            tabla.Cell().Padding(4).Text(p.Codigo);
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text(p.Codigo);
 
-                            tabla.Cell().Padding(4).Text(p.Nombre);
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text(p.Nombre);
 
-                            tabla.Cell().Padding(4).Text(p.Stock.ToString());
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text(p.Stock.ToString());
 
-                            tabla.Cell().Padding(4).Text(p.StockMinimo.ToString());
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text(p.StockMinimo.ToString());
 
-                            tabla.Cell().Padding(4).Text(estado);
+                            tabla.Cell()
+                                .Background(color)
+                                .Border(1)
+                                .BorderColor(Colors.Grey.Lighten2)
+                                .Padding(5)
+                                .Text(estado);
+
+                            fila++;
                         }
                     });
 
-                    //==============================
+                    //=========================
                     // PIE
-                    //==============================
+                    //=========================
 
                     page.Footer().Row(row =>
                     {
@@ -942,7 +1233,6 @@ namespace MaterialEscolarReyes.Controllers
                                 x.TotalPages();
                             });
                     });
-
                 });
             });
 
