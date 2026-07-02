@@ -122,22 +122,32 @@ namespace MaterialEscolarReyes.Controllers
             ViewBag.Categoria = categoria;
             return View("Categoria", productos);
         }
-        public async Task<IActionResult> Ofertas()
+        public async Task<IActionResult> Promociones()
         {
-            var productos = await _context.Productos
+            ViewBag.Nuevos = await _context.Productos
+                .Include(p => p.Categoria)
+                .Include(p => p.Marca)
                 .Where(p => p.Stock > 0)
                 .OrderByDescending(p => p.FechaRegistro)
-                .Take(12)
+                .Take(8)
                 .ToListAsync();
 
-            ViewBag.Categorias = await _context.Categorias
-                .OrderBy(c => c.Nombre)
+            ViewBag.Economicos = await _context.Productos
+                .Include(p => p.Categoria)
+                .Include(p => p.Marca)
+                .Where(p => p.Stock > 0)
+                .OrderBy(p => p.PrecioVenta)
+                .Take(8)
                 .ToListAsync();
 
-            return View("Index", productos);
-        }
-        public IActionResult Contacto()
-        {
+            ViewBag.Destacados = await _context.Productos
+                .Include(p => p.Categoria)
+                .Include(p => p.Marca)
+                .Where(p => p.Stock > 0)
+                .OrderBy(p => Guid.NewGuid())
+                .Take(8)
+                .ToListAsync();
+
             return View();
         }
     }

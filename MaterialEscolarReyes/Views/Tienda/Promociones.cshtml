@@ -1,0 +1,245 @@
+﻿@using MaterialEscolarReyes.Models
+
+@{
+    ViewData["Title"] = "Promociones";
+    Layout = "~/Views/Shared/_LayoutTienda.cshtml";
+
+    var nuevos = ViewBag.Nuevos as List<Producto>;
+    var economicos = ViewBag.Economicos as List<Producto>;
+    var destacados = ViewBag.Destacados as List<Producto>;
+}
+
+<!-- BANNER -->
+
+<section class="bg-primary text-white py-5 mb-5">
+
+    <div class="container text-center">
+
+        <h1 class="display-4 fw-bold">
+
+            PROMOCIONES
+
+        </h1>
+
+        <p class="lead">
+
+            Descubre nuestros productos recomendados para este año escolar.
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- NUEVOS -->
+
+<section class="container mb-5">
+
+    <h2 class="fw-bold mb-4">
+
+        Productos Nuevos
+
+    </h2>
+
+    <div class="row">
+
+        @foreach (var item in nuevos)
+        {
+            <div class="col-lg-3 col-md-6 mb-4">
+
+                <div class="card producto-home shadow">
+
+                    <span class="badge bg-success position-absolute m-2">
+
+                        Nuevo
+
+                    </span>
+
+                    @if (string.IsNullOrEmpty(item.ImagenPrincipal))
+                    {
+                        <img src="/images/no-image.png"
+                             class="card-img-top">
+                    }
+                    else
+                    {
+                        <img src="/uploads/productos/@item.ImagenPrincipal"
+                             class="card-img-top">
+                    }
+
+                    <div class="card-body">
+
+                        <h5>@item.Nombre</h5>
+
+                        <small class="text-secondary">
+
+                            @item.Marca?.Nombre
+
+                        </small>
+
+                        <h4 class="text-primary mt-3">
+
+                            Bs @item.PrecioVenta
+
+                        </h4>
+
+                        <a asp-controller="Tienda"
+                           asp-action="Producto"
+                           asp-route-id="@item.Id"
+                           class="btn btn-primary w-100 mt-3">
+
+                            Ver Producto
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</section>
+
+<!-- ECONÓMICOS -->
+
+<section class="container mb-5">
+
+    <h2 class="fw-bold mb-4">
+
+        Productos Económicos
+
+    </h2>
+
+    <div class="row">
+
+        @foreach (var item in economicos)
+        {
+            <div class="col-lg-3 col-md-6 mb-4">
+
+                <div class="card producto-home shadow">
+
+                    <span class="badge bg-warning text-dark position-absolute m-2">
+
+                        Económico
+
+                    </span>
+
+                    @if (string.IsNullOrEmpty(item.ImagenPrincipal))
+                    {
+                        <img src="/images/no-image.png"
+                             class="card-img-top">
+                    }
+                    else
+                    {
+                        <img src="/uploads/productos/@item.ImagenPrincipal"
+                             class="card-img-top">
+                    }
+
+                    <div class="card-body">
+
+                        <h5>@item.Nombre</h5>
+
+                        <small class="text-secondary">
+
+                            @item.Marca?.Nombre
+
+                        </small>
+
+                        <h4 class="text-primary mt-3">
+
+                            Bs @item.PrecioVenta
+
+                        </h4>
+
+                        <a asp-controller="Tienda"
+                           asp-action="Producto"
+                           asp-route-id="@item.Id"
+                           class="btn btn-primary w-100 mt-3">
+
+                            Ver Producto
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</section>
+
+<!-- DESTACADOS -->
+
+<section class="container pb-5">
+
+    <h2 class="fw-bold mb-4">
+
+        Productos Destacados
+
+    </h2>
+
+    <div class="row">
+
+        @foreach (var item in destacados)
+        {
+            <div class="col-lg-3 col-md-6 mb-4">
+
+                <div class="card producto-home shadow">
+
+                    <span class="badge bg-danger position-absolute m-2">
+
+                        Destacado
+
+                    </span>
+
+                    @if (string.IsNullOrEmpty(item.ImagenPrincipal))
+                    {
+                        <img src="/images/no-image.png"
+                             class="card-img-top">
+                    }
+                    else
+                    {
+                        <img src="/uploads/productos/@item.ImagenPrincipal"
+                             class="card-img-top">
+                    }
+
+                    <div class="card-body">
+
+                        <h5>@item.Nombre</h5>
+
+                        <small class="text-secondary">
+
+                            @item.Marca?.Nombre
+
+                        </small>
+
+                        <h4 class="text-primary mt-3">
+
+                            Bs @item.PrecioVenta
+
+                        </h4>
+
+                        <a asp-controller="Tienda"
+                           asp-action="Producto"
+                           asp-route-id="@item.Id"
+                           class="btn btn-primary w-100 mt-3">
+
+                            Ver Producto
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</section>
