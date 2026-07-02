@@ -92,9 +92,9 @@
 
         }
 
-        if (texto.includes("oferta")) {
+        if (texto.includes("Promociones")) {
 
-            location.href = "/Tienda/Ofertas";
+            location.href = "/Tienda/Promociones";
 
             return;
 
