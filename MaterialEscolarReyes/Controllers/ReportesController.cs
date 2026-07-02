@@ -359,49 +359,105 @@ namespace MaterialEscolarReyes.Controllers
             {
                 container.Page(page =>
                 {
+                    page.Size(PageSizes.A4);
                     page.Margin(30);
 
-                    page.Header()
-                        .Text("REPORTE DE CLIENTES")
-                        .FontSize(22)
-                        .Bold()
-                        .FontColor(Colors.Blue.Darken2);
+                    page.Header().Column(header =>
+                    {
+                        header.Item().Text("📚 MATERIAL ESCOLAR REYES")
+                            .FontSize(24)
+                            .Bold()
+                            .FontColor(Colors.Blue.Darken3);
+
+                        header.Item().Text("Sistema de Inventario y Ventas")
+                            .FontSize(12)
+                            .FontColor(Colors.Grey.Darken2);
+
+                        header.Item().PaddingVertical(8);
+
+                        header.Item().LineHorizontal(2)
+                            .LineColor(Colors.Blue.Darken2);
+
+                        header.Item().PaddingTop(10);
+
+                        header.Item().Text("REPORTE DE CLIENTES")
+                            .FontSize(20)
+                            .Bold();
+
+                        header.Item().Text($"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}")
+                            .FontSize(10)
+                            .FontColor(Colors.Grey.Darken1);
+
+                        header.Item().PaddingBottom(15);
+                    });
 
                     page.Content().Table(tabla =>
                     {
-                        tabla.ColumnsDefinition(columns =>
+                        tabla.ColumnsDefinition(c =>
                         {
-                            columns.RelativeColumn();
-                            columns.RelativeColumn();
-                            columns.RelativeColumn();
-                            columns.RelativeColumn();
+                            c.RelativeColumn(2);
+                            c.RelativeColumn(2);
+                            c.RelativeColumn();
+                            c.RelativeColumn(2);
                         });
 
-                        tabla.Header(header =>
+                        tabla.Header(h =>
                         {
-                            header.Cell().Text("Nombre").Bold();
-                            header.Cell().Text("Correo").Bold();
-                            header.Cell().Text("Teléfono").Bold();
-                            header.Cell().Text("Dirección").Bold();
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(8)
+                                .Text("Cliente").Bold().FontColor(Colors.White);
+
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(8)
+                                .Text("Correo").Bold().FontColor(Colors.White);
+
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(8)
+                                .Text("Teléfono").Bold().FontColor(Colors.White);
+
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(8)
+                                .Text("Dirección").Bold().FontColor(Colors.White);
                         });
 
                         foreach (var c in clientes)
                         {
-                            tabla.Cell().Text($"{c.Nombre} {c.Apellido}");
-                            tabla.Cell().Text(c.Correo);
-                            tabla.Cell().Text(c.Telefono ?? "");
-                            tabla.Cell().Text(c.Direccion ?? "");
+                            tabla.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(6)
+                                .Text($"{c.Nombre} {c.Apellido}");
+
+                            tabla.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(6)
+                                .Text(c.Correo);
+
+                            tabla.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(6)
+                                .Text(c.Telefono ?? "-");
+
+                            tabla.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(6)
+                                .Text(c.Direccion ?? "-");
                         }
                     });
 
-                    page.Footer()
-                        .AlignCenter()
-                        .Text($"Generado: {DateTime.Now:dd/MM/yyyy HH:mm}");
+                    page.Footer().Column(footer =>
+                    {
+                        footer.Item().LineHorizontal(1);
+
+                        footer.Item().PaddingTop(10);
+
+                        footer.Item().Row(row =>
+                        {
+                            row.RelativeItem()
+                                .Text($"Total de clientes: {clientes.Count}");
+
+                            row.ConstantItem(170)
+                                .AlignRight()
+                                .Text(x =>
+                                {
+                                    x.Span("Página ");
+                                    x.CurrentPageNumber();
+                                    x.Span(" de ");
+                                    x.TotalPages();
+                                });
+                        });
+                    });
                 });
             });
 
-            return File(
-                pdf.GeneratePdf(),
+            return File(pdf.GeneratePdf(),
                 "application/pdf",
                 "ReporteClientes.pdf");
         }
@@ -413,49 +469,61 @@ namespace MaterialEscolarReyes.Controllers
             {
                 container.Page(page =>
                 {
+                    page.Size(PageSizes.A4);
                     page.Margin(30);
 
-                    page.Header()
-                        .Text("REPORTE DE PROVEEDORES")
-                        .FontSize(22)
-                        .Bold()
-                        .FontColor(Colors.Blue.Darken2);
+                    page.Header().Column(header =>
+                    {
+                        header.Item().Text("📚 MATERIAL ESCOLAR REYES")
+                            .FontSize(24).Bold().FontColor(Colors.Blue.Darken3);
+
+                        header.Item().Text("Sistema de Inventario y Ventas")
+                            .FontSize(12);
+
+                        header.Item().LineHorizontal(2)
+                            .LineColor(Colors.Blue.Darken2);
+
+                        header.Item().PaddingTop(10);
+
+                        header.Item().Text("REPORTE DE PROVEEDORES")
+                            .FontSize(20).Bold();
+
+                        header.Item().Text($"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}");
+                    });
 
                     page.Content().Table(tabla =>
                     {
-                        tabla.ColumnsDefinition(columns =>
+                        tabla.ColumnsDefinition(c =>
                         {
-                            columns.RelativeColumn();
-                            columns.RelativeColumn();
-                            columns.RelativeColumn();
-                            columns.RelativeColumn();
+                            c.RelativeColumn(2);
+                            c.RelativeColumn(2);
+                            c.RelativeColumn();
+                            c.RelativeColumn(2);
                         });
 
-                        tabla.Header(header =>
+                        tabla.Header(h =>
                         {
-                            header.Cell().Text("Nombre").Bold();
-                            header.Cell().Text("Correo").Bold();
-                            header.Cell().Text("Teléfono").Bold();
-                            header.Cell().Text("Dirección").Bold();
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Proveedor").Bold().FontColor(Colors.White);
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Correo").Bold().FontColor(Colors.White);
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Teléfono").Bold().FontColor(Colors.White);
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Dirección").Bold().FontColor(Colors.White);
                         });
 
                         foreach (var p in proveedores)
                         {
-                            tabla.Cell().Text(p.Nombre);
-                            tabla.Cell().Text(p.Correo ?? "");
-                            tabla.Cell().Text(p.Telefono ?? "");
-                            tabla.Cell().Text(p.Direccion ?? "");
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(p.Nombre);
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(p.Correo ?? "-");
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(p.Telefono ?? "-");
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(p.Direccion ?? "-");
                         }
                     });
 
-                    page.Footer()
-                        .AlignCenter()
-                        .Text($"Generado: {DateTime.Now:dd/MM/yyyy HH:mm}");
+                    page.Footer().AlignCenter()
+                        .Text($"Total de proveedores: {proveedores.Count}");
                 });
             });
 
-            return File(
-                pdf.GeneratePdf(),
+            return File(pdf.GeneratePdf(),
                 "application/pdf",
                 "ReporteProveedores.pdf");
         }
@@ -470,43 +538,61 @@ namespace MaterialEscolarReyes.Controllers
             {
                 container.Page(page =>
                 {
+                    page.Size(PageSizes.A4);
                     page.Margin(30);
 
-                    page.Header()
-                        .Text("REPORTE DE VENTAS")
-                        .FontSize(22)
-                        .Bold();
+                    page.Header().Column(header =>
+                    {
+                        header.Item().Text("📚 MATERIAL ESCOLAR REYES")
+                            .FontSize(24).Bold().FontColor(Colors.Blue.Darken3);
+
+                        header.Item().Text("Sistema de Inventario y Ventas");
+
+                        header.Item().LineHorizontal(2);
+
+                        header.Item().PaddingTop(10);
+
+                        header.Item().Text("REPORTE DE VENTAS")
+                            .FontSize(20).Bold();
+
+                        header.Item().Text($"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}");
+                    });
 
                     page.Content().Table(tabla =>
                     {
                         tabla.ColumnsDefinition(c =>
                         {
                             c.RelativeColumn();
-                            c.RelativeColumn();
+                            c.RelativeColumn(2);
                             c.RelativeColumn();
                             c.RelativeColumn();
                         });
 
                         tabla.Header(h =>
                         {
-                            h.Cell().Text("Venta").Bold();
-                            h.Cell().Text("Cliente").Bold();
-                            h.Cell().Text("Fecha").Bold();
-                            h.Cell().Text("Total").Bold();
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Venta").Bold().FontColor(Colors.White);
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Cliente").Bold().FontColor(Colors.White);
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Fecha").Bold().FontColor(Colors.White);
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Total").Bold().FontColor(Colors.White);
                         });
 
                         foreach (var v in ventas)
                         {
-                            tabla.Cell().Text(v.NumeroVenta);
-                            tabla.Cell().Text(v.Cliente?.Nombre ?? "");
-                            tabla.Cell().Text(v.Fecha.ToString("dd/MM/yyyy"));
-                            tabla.Cell().Text($"Bs {v.Total}");
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(v.NumeroVenta);
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(v.Cliente?.Nombre ?? "-");
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(v.Fecha.ToString("dd/MM/yyyy"));
+                            tabla.Cell().Padding(6).BorderBottom(1).Text($"Bs {v.Total:N2}");
                         }
                     });
+
+                    page.Footer().AlignCenter()
+                        .Text($"Total de ventas: {ventas.Count}");
                 });
             });
 
-            return File(pdf.GeneratePdf(), "application/pdf", "ReporteVentas.pdf");
+            return File(pdf.GeneratePdf(),
+                "application/pdf",
+                "ReporteVentas.pdf");
         }
         public async Task<IActionResult> StockPdf()
         {
@@ -518,43 +604,61 @@ namespace MaterialEscolarReyes.Controllers
             {
                 container.Page(page =>
                 {
+                    page.Size(PageSizes.A4);
                     page.Margin(30);
 
-                    page.Header()
-                        .Text("REPORTE DE STOCK")
-                        .FontSize(22)
-                        .Bold();
+                    page.Header().Column(header =>
+                    {
+                        header.Item().Text("📚 MATERIAL ESCOLAR REYES")
+                            .FontSize(24).Bold().FontColor(Colors.Blue.Darken3);
+
+                        header.Item().Text("Sistema de Inventario y Ventas");
+
+                        header.Item().LineHorizontal(2);
+
+                        header.Item().PaddingTop(10);
+
+                        header.Item().Text("REPORTE DE STOCK")
+                            .FontSize(20).Bold();
+
+                        header.Item().Text($"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}");
+                    });
 
                     page.Content().Table(tabla =>
                     {
                         tabla.ColumnsDefinition(c =>
                         {
                             c.RelativeColumn();
-                            c.RelativeColumn();
+                            c.RelativeColumn(2);
                             c.RelativeColumn();
                             c.RelativeColumn();
                         });
 
                         tabla.Header(h =>
                         {
-                            h.Cell().Text("Código").Bold();
-                            h.Cell().Text("Producto").Bold();
-                            h.Cell().Text("Stock").Bold();
-                            h.Cell().Text("Mínimo").Bold();
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Código").Bold().FontColor(Colors.White);
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Producto").Bold().FontColor(Colors.White);
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Stock").Bold().FontColor(Colors.White);
+                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Mínimo").Bold().FontColor(Colors.White);
                         });
 
                         foreach (var p in productos)
                         {
-                            tabla.Cell().Text(p.Codigo);
-                            tabla.Cell().Text(p.Nombre);
-                            tabla.Cell().Text(p.Stock.ToString());
-                            tabla.Cell().Text(p.StockMinimo.ToString());
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(p.Codigo);
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(p.Nombre);
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(p.Stock.ToString());
+                            tabla.Cell().Padding(6).BorderBottom(1).Text(p.StockMinimo.ToString());
                         }
                     });
+
+                    page.Footer().AlignCenter()
+                        .Text($"Productos registrados: {productos.Count}");
                 });
             });
 
-            return File(pdf.GeneratePdf(), "application/pdf", "ReporteStock.pdf");
+            return File(pdf.GeneratePdf(),
+                "application/pdf",
+                "ReporteStock.pdf");
         }
     }
 }
