@@ -538,59 +538,106 @@ namespace MaterialEscolarReyes.Controllers
             {
                 container.Page(page =>
                 {
-                    page.Size(PageSizes.A4);
                     page.Margin(30);
 
-                    page.Header().Column(header =>
+                    page.Header().Column(col =>
                     {
-                        header.Item().Text("📚 MATERIAL ESCOLAR REYES")
-                            .FontSize(24).Bold().FontColor(Colors.Blue.Darken3);
+                        col.Item()
+                            .AlignCenter()
+                            .Height(70)
+                            .Image(
+                                System.IO.File.ReadAllBytes(
+                                    Path.Combine(
+                                        Directory.GetCurrentDirectory(),
+                                        "wwwroot",
+                                        "images",
+                                        "logo.png")),
+                                ImageScaling.FitHeight);
 
-                        header.Item().Text("Sistema de Inventario y Ventas");
+                        col.Item()
+                            .AlignCenter()
+                            .Text("MATERIAL ESCOLAR REYES")
+                            .FontSize(22)
+                            .Bold();
 
-                        header.Item().LineHorizontal(2);
+                        col.Item()
+                            .AlignCenter()
+                            .Text("Sistema de Inventarios y Ventas")
+                            .FontSize(12);
 
-                        header.Item().PaddingTop(10);
+                        col.Item()
+                            .AlignCenter()
+                            .Text("REPORTE DE VENTAS")
+                            .FontSize(18)
+                            .Bold();
 
-                        header.Item().Text("REPORTE DE VENTAS")
-                            .FontSize(20).Bold();
-
-                        header.Item().Text($"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}");
+                        col.Item().PaddingBottom(15);
                     });
 
                     page.Content().Table(tabla =>
                     {
-                        tabla.ColumnsDefinition(c =>
+                        tabla.ColumnsDefinition(columns =>
                         {
-                            c.RelativeColumn();
-                            c.RelativeColumn(2);
-                            c.RelativeColumn();
-                            c.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn(2);
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
                         });
 
-                        tabla.Header(h =>
+                        tabla.Header(header =>
                         {
-                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Venta").Bold().FontColor(Colors.White);
-                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Cliente").Bold().FontColor(Colors.White);
-                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Fecha").Bold().FontColor(Colors.White);
-                            h.Cell().Background(Colors.Blue.Darken2).Padding(7).Text("Total").Bold().FontColor(Colors.White);
+                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                                .Text("Venta").FontColor(Colors.White).Bold();
+
+                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                                .Text("Cliente").FontColor(Colors.White).Bold();
+
+                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                                .Text("Fecha").FontColor(Colors.White).Bold();
+
+                            header.Cell().Background(Colors.Blue.Medium).Padding(5)
+                                .Text("Total").FontColor(Colors.White).Bold();
                         });
 
                         foreach (var v in ventas)
                         {
-                            tabla.Cell().Padding(6).BorderBottom(1).Text(v.NumeroVenta);
-                            tabla.Cell().Padding(6).BorderBottom(1).Text(v.Cliente?.Nombre ?? "-");
-                            tabla.Cell().Padding(6).BorderBottom(1).Text(v.Fecha.ToString("dd/MM/yyyy"));
-                            tabla.Cell().Padding(6).BorderBottom(1).Text($"Bs {v.Total:N2}");
+                            tabla.Cell().Padding(4).Text(v.NumeroVenta);
+
+                            tabla.Cell().Padding(4)
+                                .Text($"{v.Cliente?.Nombre} {v.Cliente?.Apellido}");
+
+                            tabla.Cell().Padding(4)
+                                .Text(v.Fecha.ToString("dd/MM/yyyy"));
+
+                            tabla.Cell().Padding(4)
+                                .Text($"Bs {v.Total:N2}");
                         }
                     });
 
-                    page.Footer().AlignCenter()
-                        .Text($"Total de ventas: {ventas.Count}");
+                    page.Footer().Row(row =>
+                    {
+                        row.RelativeItem()
+                            .AlignLeft()
+                            .Text($"Total de ventas: {ventas.Count}");
+
+                        row.RelativeItem()
+                            .AlignCenter()
+                            .Text($"Generado: {DateTime.Now:dd/MM/yyyy HH:mm}");
+
+                        row.RelativeItem()
+                            .AlignRight()
+                            .Text(x =>
+                            {
+                                x.CurrentPageNumber();
+                                x.Span(" / ");
+                                x.TotalPages();
+                            });
+                    });
                 });
             });
 
-            return File(pdf.GeneratePdf(),
+            return File(
+                pdf.GeneratePdf(),
                 "application/pdf",
                 "ReporteVentas.pdf");
         }
